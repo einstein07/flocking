@@ -6,11 +6,11 @@
 
 # The number of robots.  This should match the 'quantity' value in the argos world file (e.g. argos_worlds/demo.argos).
 
-n=320
+n=20
 
 LAUNCH_FILE=/tmp/argos_interface.launch.py
 CONTROLLER_DIR=/home/sindiso/ros2_dev/src/flocking
-ARGOS_CONFIG_DIR=$CONTROLLER_DIR/launch/flocking320.argos
+ARGOS_CONFIG_DIR=$CONTROLLER_DIR/launch/flocking20.argos
 
 echo "import os" > $LAUNCH_FILE
 echo -e "import pathlib" >> $LAUNCH_FILE
