@@ -3,7 +3,7 @@
 # Runs ARGoS in background and ROS2 in foreground with logs organized by population size
 
 # Configuration
-ROBOT_COUNTS=(160 320 640 1280 2560 5120 10240)
+ROBOT_COUNTS=(10 20 40 80 160 320 640 1280 2560 5120 10240)
 REPETITIONS=10
 RESULTS_FILE="scalability_results_$(date +%Y%m%d_%H%M%S).csv"
 CONFIG_DIR="."
@@ -15,12 +15,12 @@ SHUTDOWN_GRACE_SECONDS=5
 SAMPLE_INTERVAL=1
 
 # Environment setup
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/argos3:/home/uni-konstanz/ros2_ws/install/argos3_ros2_bridge/lib
-export ARGOS_PLUGIN_PATH=/home/uni-konstanz/ros2_ws/install/argos3_ros2_bridge/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/argos3:/opt/ros2_ws/install/argos3_ros2_bridge/lib
+export ARGOS_PLUGIN_PATH=/opt/ros2_ws/install/argos3_ros2_bridge/lib/
 export ROS_LOCALHOST_ONLY=1
 
 # Source ROS2 workspace setup
-source /home/uni-konstanz/ros2_ws/install/setup.bash
+source /opt/ros2_ws/install/setup.bash
 
 # Initialize results file
 echo "Robots,Repetition,WallTime(s),CPU(%),MaxMem(kB),ArgosCPU(%),Ros2CPU(%),ArgosMem(kB),Ros2Mem(kB)" > "$RESULTS_FILE"
@@ -70,7 +70,7 @@ from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    config_dir = os.path.join('/home/uni-konstanz/ros2_ws/src/flocking', 'config')
+    config_dir = os.path.join('/opt/ros2_ws/src/flocking', 'config')
     param_config = os.path.join(config_dir, "config.yaml")
     with open(param_config, 'r') as f:
         params = yaml.safe_load(f)["flocking"]["ros__parameters"]
