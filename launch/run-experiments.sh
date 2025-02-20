@@ -6,8 +6,8 @@
 # and maximum memory usage for each run.
 
 # Configuration:
-ROBOT_COUNTS=(10 20 40 80)
-REPETITIONS=20
+ROBOT_COUNTS=(10 20 40 80 160 320 640 1280 2560 5120 10240)
+REPETITIONS=10
 RESULTS_FILE="scalability_results.csv"
 
 # Directory where your Argos config files reside.
@@ -62,7 +62,7 @@ for ROBOTS in "${ROBOT_COUNTS[@]}"; do
 	    
 	echo -e "\tld = LaunchDescription()" >> $LAUNCH_FILE
 
-	for ((i=0; i<n; i++)); do
+	for ((i=0; i<$ROBOTS; i++)); do
 	    namespace="bot$i"
 	    echo -e "\t$namespace = Node(package=\"argos3_ros2_bridge\", executable=\"flocking\", name=\"flocking\", output=\"screen\", namespace=\"$namespace\", parameters=[params])" >> $LAUNCH_FILE
 	    echo -e "\tld.add_action($namespace)" >> $LAUNCH_FILE
@@ -75,11 +75,19 @@ for ROBOTS in "${ROBOT_COUNTS[@]}"; do
         
         # Launch Argos simulation in background and then the ROS2 launch.
         # Wrap the combined command in /usr/bin/time to capture metrics.
-        /usr/bin/time -f "WALLTIME=%e CPU=%P MEM=%M" -o "$TEMP_TIME_FILE" bash -c "\
+        /usr/bin/time -f "row=%e, %P, %M" -o "$TEMP_TIME_FILE" bash -c "\
             $ARGOS_EXEC -c $CONFIG_FILE -z & \
             argos_pid=\$!; \
             ros2 launch $LAUNCH_FILE; \
             wait \$argos_pid"
+
+        #ros2 launch $LAUNCH_FILE &
+        #sleep 1     
+    	#/usr/bin/time -f "row=%e, %P, %M" -o "$TEMP_TIME_FILE" bash -c "\
+    	#    $ARGOS_EXEC -c $CONFIG_FILE -z
+    	#    argos_pid=\$!; \
+        #    ros2 launch $LAUNCH_FILE; \
+        #    wait \$argos_pid"
         
         EXIT_CODE=$?
         if [[ $EXIT_CODE -ne 0 ]]; then
@@ -88,12 +96,12 @@ for ROBOTS in "${ROBOT_COUNTS[@]}"; do
         fi
         
         # Extract metrics from the temporary file.
-        WALLTIME=$(grep "WALLTIME=" "$TEMP_TIME_FILE" | sed 's/WALLTIME=//')
-        CPU=$(grep "CPU=" "$TEMP_TIME_FILE" | sed 's/CPU=//')
-        MEM=$(grep "MEM=" "$TEMP_TIME_FILE" | sed 's/MEM=//')
+        ROW=$(grep "row=" "$TEMP_TIME_FILE" | sed 's/row=//')
+        #CPU=$(grep "CPU=" "$TEMP_TIME_FILE" | sed 's/CPU=//')
+        #MEM=$(grep "MEM=" "$TEMP_TIME_FILE" | sed 's/MEM=//')
         
         # Append the results (comma-separated) to the results file.
-        echo "$ROBOTS,$rep,$WALLTIME,$CPU,$MEM" >> "$RESULTS_FILE"
+        echo "$ROBOTS,$rep,$ROW" >> "$RESULTS_FILE"
         rm -f "$TEMP_TIME_FILE"
     done
 done

@@ -43,7 +43,7 @@
   <!-- *********************** -->
   <!-- * Arena configuration * -->
   <!-- *********************** -->
-  <arena size="100,100,1" center="0,0,0.5">
+  <arena size="1000,1000,1" center="0,0,0.5">
 
     <light id="light"
            position="0,10,0.5"

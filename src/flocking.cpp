@@ -53,7 +53,7 @@ FlockingController::FlockingController(std::shared_ptr<rclcpp::Node> node)
 {
   this -> node_ = node;
   ns_ = node_->get_namespace();
-  initialized_leds_ = false;
+  initialized_ = false;
   // Load controller parameters from the parameter server.
   wheel_params_.load_from_parameters(node_, "wheel_turning");
   flocking_params_.load_from_parameters(node_, "flocking");
@@ -106,13 +106,19 @@ void FlockingController::camera_sensor_callback(const argos3_ros2_bridge::msg::B
 /****************************************/
 
 void FlockingController::timer_callback() {
-  if (!initialized_leds_ && cmd_led_ -> get_subscription_count() > 0){
-    Led led_msg;
+  if (!initialized_ && cmd_led_ -> get_subscription_count() > 0){
+    /**Led led_msg;
     led_msg.color = "red";
     led_msg.index = 12;
     led_msg.mode = "SINGLE";
-    cmd_led_->publish(led_msg);
-    initialized_leds_ = true;
+    cmd_led_->publish(led_msg);*/
+    initialized_ = true;
+  }
+  if (initialized_ && cmd_led_ -> get_subscription_count() == 0){
+    auto current_time = node_ -> now();
+    std::cout << "Bot: " << ns_ << " controller done. Current time: " << current_time.seconds() << " secs" << std::endl;
+		rclcpp::shutdown();
+		exit(0);
   }
   // Combine vectors from the light sensor and flocking interactions.
   Vector2 vector_to_light = vectorToLight();
@@ -168,7 +174,7 @@ Vector2 FlockingController::flockingVector() {
 
 void FlockingController::setWheelSpeedsFromVector(const Vector2 & heading) {
   double heading_angle = std::atan2(heading.y, heading.x);
-  double heading_length = heading.length();
+  //double heading_length = heading.length();
   double base_speed = wheel_params_.max_speed;//std::min(heading_length, wheel_params_.max_speed);
   double abs_angle = std::fabs(heading_angle);
   

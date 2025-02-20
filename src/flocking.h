@@ -92,7 +92,7 @@ public:
 private:
   std::shared_ptr<rclcpp::Node> node_;
   const char* ns_;
-  bool initialized_leds_;
+  bool initialized_;
   // Timer callback for the control loop.
   void timer_callback();
 
