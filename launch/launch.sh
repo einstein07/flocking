@@ -6,7 +6,7 @@
 ROBOT_COUNTS=(10 20 40 80 160 320 640 1280 2560 5120 10240)
 REPETITIONS=10
 RESULTS_FILE="/mnt/scalability_results_$(date +%Y%m%d_%H%M%S).csv"
-CONFIG_DIR="."
+CONFIG_DIR="/opt/ros2_ws/src/flocking/launch"
 LAUNCH_FILE="/tmp/argos_interface.launch.py"
 ARGOS_EXEC="argos3"
 ROS2_TIME_FILE="/tmp/ros2_time_$$.tmp"
