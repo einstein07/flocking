@@ -3,7 +3,7 @@
 # Runs ARGoS in background and ROS2 in foreground with logs organized by population size
 
 # Configuration
-ROBOT_COUNTS=(10 20 40 80 160 320 640 1280 2560 5120 10240)
+ROBOT_COUNTS=(320 640 1280 2560 5120 10240)
 REPETITIONS=10
 RESULTS_FILE="/mnt/scalability_results_$(date +%Y%m%d_%H%M%S).csv"
 CONFIG_DIR="/opt/ros2_ws/src/flocking/launch"
