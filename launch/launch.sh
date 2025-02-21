@@ -5,7 +5,7 @@
 # Configuration
 ROBOT_COUNTS=(10 20 40 80 160 320 640 1280 2560 5120 10240)
 REPETITIONS=10
-RESULTS_FILE="/mnt/scalability_results_$(date +%Y%m%d_%H%M%S).csv"
+RESULTS_FILE="/opt/ros2_ws/src/flocking/launch/scalability_results_$(date +%Y%m%d_%H%M%S).csv"
 CONFIG_DIR="/opt/ros2_ws/src/flocking/launch"
 LAUNCH_FILE="/tmp/argos_interface.launch.py"
 ARGOS_EXEC="argos3"
@@ -51,7 +51,7 @@ for ROBOTS in "${ROBOT_COUNTS[@]}"; do
     echo "Running experiments for $ROBOTS robots..." >&2
     
     # Create directory for this population size
-    LOG_DIR="/mnt/${ROBOTS}-robots"
+    LOG_DIR="/opt/ros2_ws/src/flocking/launch/${ROBOTS}-robots"
     mkdir -p "$LOG_DIR"
     
     
