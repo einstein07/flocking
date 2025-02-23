@@ -83,12 +83,14 @@ def generate_launch_description():
 EOL
         for ((i=0; i<ROBOTS; i++)); do
             namespace="bot$i"
+            domain_id=$((i / 115))  # Group by 115: 0-114 = 0, 115-229 = 1, etc.
             echo "    ${namespace} = Node(" >> "$LAUNCH_FILE"
             echo "        package=\"argos3_ros2_bridge\"," >> "$LAUNCH_FILE"
             echo "        executable=\"flocking\"," >> "$LAUNCH_FILE"
             echo "        name=\"flocking\"," >> "$LAUNCH_FILE"
             echo "        output=\"screen\"," >> "$LAUNCH_FILE"
             echo "        namespace=\"${namespace}\"," >> "$LAUNCH_FILE"
+            echo "        additional_env={\"ROS_DOMAIN_ID\": \"$domain_id\"}," >> "$LAUNCH_FILE"
             echo "        parameters=[params]" >> "$LAUNCH_FILE"
             echo "    )" >> "$LAUNCH_FILE"
             echo "    ld.add_action(${namespace})" >> "$LAUNCH_FILE"
@@ -104,7 +106,7 @@ EOL
         ARGOS_PID=$!
 
         # Give ARGoS a moment to start
-        sleep 2
+        sleep 60
 
         # Launch ROS2 in foreground with output logging to population directory
         ROS2_OUTPUT_FILE="${LOG_DIR}/ros2_output_${ROBOTS}_${rep}.log"
