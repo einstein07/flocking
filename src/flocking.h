@@ -120,6 +120,7 @@ private:
   WheelTurningParams wheel_params_;
   FlockingInteractionParams flocking_params_;
   double wheel_separation_; // Distance between wheels for kinematics.
+  bool printed_;
 };
 
 

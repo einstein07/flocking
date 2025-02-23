@@ -51,7 +51,10 @@ double FlockingInteractionParams::generalizedLennardJones(double distance) const
 
 FlockingController::FlockingController(std::shared_ptr<rclcpp::Node> node) 
 {
+  printed_ = false;
   this -> node_ = node;
+  // Retrieve the domain ID via the NodeBaseInterface
+  
   ns_ = node_->get_namespace();
   initialized_ = false;
   // Load controller parameters from the parameter server.
@@ -106,6 +109,11 @@ void FlockingController::camera_sensor_callback(const argos3_ros2_bridge::msg::B
 /****************************************/
 
 void FlockingController::timer_callback() {
+  if (!printed_) {
+    auto domain_id = node_->get_node_base_interface()->get_context()->get_domain_id();
+    std::cout << "Controller running on ROS_DOMAIN_ID: " << domain_id << std::endl;
+    printed_ = true;
+  }
   if (!initialized_ && cmd_led_ -> get_subscription_count() > 0){
     /**Led led_msg;
     led_msg.color = "red";
