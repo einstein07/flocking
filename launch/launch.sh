@@ -100,7 +100,7 @@ EOL
 
         # Launch Argos in background
         TEMP_TIME_FILE="time_output_$$_$ROBOTS_$rep.tmp"
-        /usr/bin/time -f "%e %P %M" -o "$TEMP_TIME_FILE" RMW_IMPLEMENTATION=rmw_cyclonedds_cpp $ARGOS_EXEC -c "$CONFIG_FILE" -z &
+        /usr/bin/time -f "%e %P %M" -o "$TEMP_TIME_FILE" $ARGOS_EXEC -c "$CONFIG_FILE" -z &
         ARGOS_PID=$!
 
         # Give ARGoS a moment to start
@@ -108,7 +108,7 @@ EOL
 
         # Launch ROS2 in foreground with output logging to population directory
         ROS2_OUTPUT_FILE="${LOG_DIR}/ros2_output_${ROBOTS}_${rep}.log"
-        ( /usr/bin/time -f "%e %P %M" -o "$ROS2_TIME_FILE" RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch "$LAUNCH_FILE" ) > "$ROS2_OUTPUT_FILE" 2>&1 &
+        ( /usr/bin/time -f "%e %P %M" -o "$ROS2_TIME_FILE" ros2 launch "$LAUNCH_FILE" ) > "$ROS2_OUTPUT_FILE" 2>&1 &
         ROS2_PID=$!
 
         # Monitor ROS2 usage with precise node counting
