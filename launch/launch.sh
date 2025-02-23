@@ -18,9 +18,13 @@ SAMPLE_INTERVAL=1
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/argos3:/opt/ros2_ws/install/argos3_ros2_bridge/lib
 export ARGOS_PLUGIN_PATH=/opt/ros2_ws/install/argos3_ros2_bridge/lib/
 #export ROS_LOCALHOST_ONLY=1
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 # Source ROS2 workspace setup
 source /opt/ros2_ws/install/setup.bash
+echo $RMW_IMPLEMENTATION
+ulimit -n 999999
+ulimit -n
 
 # Initialize results file
 echo "Robots,Repetition,WallTime(s),CPU(%),MaxMem(kB),ArgosCPU(%),Ros2CPU(%),ArgosMem(kB),Ros2Mem(kB)" > "$RESULTS_FILE"
