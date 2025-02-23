@@ -17,7 +17,7 @@ SAMPLE_INTERVAL=1
 # Environment setup
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/argos3:/opt/ros2_ws/install/argos3_ros2_bridge/lib
 export ARGOS_PLUGIN_PATH=/opt/ros2_ws/install/argos3_ros2_bridge/lib/
-#export ROS_LOCALHOST_ONLY=1
+export ROS_LOCALHOST_ONLY=1
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 # Source ROS2 workspace setup
@@ -223,4 +223,4 @@ EOL
 done
 
 echo "All experiments complete. Results saved to $RESULTS_FILE." >&2
-cleanup
+#cleanup

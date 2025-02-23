@@ -223,4 +223,4 @@ EOL
 done
 
 echo "All experiments complete. Results saved to $RESULTS_FILE." >&2
-cleanup
+#cleanup
