@@ -44,7 +44,7 @@ cleanup() {
 }
 
 # Trap signals
-trap cleanup INT TERM EXIT
+#trap cleanup INT TERM EXIT
 
 for ROBOTS in "${ROBOT_COUNTS[@]}"; do
     CONFIG_FILE="${CONFIG_DIR}/flocking${ROBOTS}.argos"
@@ -223,4 +223,4 @@ EOL
 done
 
 echo "All experiments complete. Results saved to $RESULTS_FILE." >&2
-cleanup
+#cleanup
