@@ -27,15 +27,7 @@
         <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
         <footbot_proximity implementation="default" show_rays="true" />
       </sensors>
-      <params>
-        <wheel_turning hard_turn_angle_threshold="90"
-                       soft_turn_angle_threshold="70"
-                       no_turn_angle_threshold="10"
-                       max_speed="10" />
-        <flocking target_distance="75"
-                  gain="1000"
-                  exponent="2" />
-      </params>
+      <params nodes_per_domain="115" />
     </argos_ros_bot_controller>
 
   </controllers>
