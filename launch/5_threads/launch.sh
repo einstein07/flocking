@@ -62,7 +62,7 @@ for ROBOTS in "${ROBOT_COUNTS[@]}"; do
     for (( rep=1; rep<=REPETITIONS; rep++ )); do
         echo "  Repetition $rep for $ROBOTS robots..." >&2
          # Clean up before each robot count
-    	 cleanup
+    	 #cleanup
         # Generate launch file
         cat > "$LAUNCH_FILE" << EOL
 import os
