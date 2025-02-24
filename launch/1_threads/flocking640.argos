@@ -27,7 +27,7 @@
         <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
         <footbot_proximity implementation="default" show_rays="true" />
       </sensors>
-      <params nodes_per_domain="115" />
+      <params multiple_domains="false" nodes_per_domain="115" ros_domain_id="222"/>
     </argos_ros_bot_controller>
 
   </controllers>

@@ -3,8 +3,8 @@
 # Runs ARGoS in background and ROS2 in foreground with logs organized by population size
 
 # Configuration
-ROBOT_COUNTS=(320 640 1280 2560 5120 10240)
-REPETITIONS=10
+ROBOT_COUNTS=(1280 2560 5120 10240)
+REPETITIONS=1
 RESULTS_FILE="/mnt/scalability_results_$(date +%Y%m%d_%H%M%S).csv"
 CONFIG_DIR="/opt/ros2_ws/src/flocking/launch/1_threads/"
 LAUNCH_FILE="/tmp/argos_interface.launch.py"
@@ -55,7 +55,7 @@ for ROBOTS in "${ROBOT_COUNTS[@]}"; do
     echo "Running experiments for $ROBOTS robots..." >&2
     
     # Create directory for this population size
-    LOG_DIR="/mnt/1_threads/${ROBOTS}-robots"
+    LOG_DIR="/mnt/1_threads_1_rep/${ROBOTS}-robots"
     mkdir -p "$LOG_DIR"
     
     
