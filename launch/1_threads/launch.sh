@@ -83,7 +83,7 @@ def generate_launch_description():
 EOL
         for ((i=0; i<ROBOTS; i++)); do
             namespace="bot$i"
-            domain_id=$((i / 50))  # Group by 115: 0-114 = 0, 115-229 = 1, etc.
+            domain_id=$((i / 20))  # Group by 115: 0-114 = 0, 115-229 = 1, etc.
             echo "    ${namespace} = Node(" >> "$LAUNCH_FILE"
             echo "        package=\"argos3_ros2_bridge\"," >> "$LAUNCH_FILE"
             echo "        executable=\"flocking\"," >> "$LAUNCH_FILE"
