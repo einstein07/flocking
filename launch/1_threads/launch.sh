@@ -3,8 +3,8 @@
 # Runs ARGoS in background and ROS2 in foreground with logs organized by population size
 
 # Configuration
-ROBOT_COUNTS=(1280 2560 5120 10240)
-REPETITIONS=1
+ROBOT_COUNTS=(10 20 40 80 160 320 640 1280 2560 5120 10240)
+REPETITIONS=10
 RESULTS_FILE="/mnt/scalability_results_$(date +%Y%m%d_%H%M%S).csv"
 CONFIG_DIR="/opt/ros2_ws/src/flocking/launch/1_threads/"
 LAUNCH_FILE="/tmp/argos_interface.launch.py"
@@ -55,7 +55,7 @@ for ROBOTS in "${ROBOT_COUNTS[@]}"; do
     echo "Running experiments for $ROBOTS robots..." >&2
     
     # Create directory for this population size
-    LOG_DIR="/mnt/1_threads_1_rep/${ROBOTS}-robots"
+    LOG_DIR="/mnt/1_threads/${ROBOTS}-robots"
     mkdir -p "$LOG_DIR"
     
     
@@ -83,7 +83,7 @@ def generate_launch_description():
 EOL
         for ((i=0; i<ROBOTS; i++)); do
             namespace="bot$i"
-            domain_id=$((i / 115))  # Group by 115: 0-114 = 0, 115-229 = 1, etc.
+            domain_id=$((i / 50))  # Group by 115: 0-114 = 0, 115-229 = 1, etc.
             echo "    ${namespace} = Node(" >> "$LAUNCH_FILE"
             echo "        package=\"argos3_ros2_bridge\"," >> "$LAUNCH_FILE"
             echo "        executable=\"flocking\"," >> "$LAUNCH_FILE"
@@ -106,7 +106,7 @@ EOL
         ARGOS_PID=$!
 
         # Give ARGoS a moment to start
-        sleep 60
+        #sleep 60
 
         # Launch ROS2 in foreground with output logging to population directory
         ROS2_OUTPUT_FILE="${LOG_DIR}/ros2_output_${ROBOTS}_${rep}.log"
@@ -117,7 +117,7 @@ EOL
         ros2_cpu_total=0
         ros2_mem_total=0
         sample_count=0
-        num_cores=24
+        num_cores=32
         DEBUG_FILE="${LOG_DIR}/debug_${ROBOTS}_${rep}.log"
         while kill -0 $ARGOS_PID 2>/dev/null; do
             ros2_cpu_sum=0
