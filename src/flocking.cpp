@@ -60,8 +60,10 @@ FlockingController::FlockingController(std::shared_ptr<rclcpp::Node> node)
   // Load controller parameters from the parameter server.
   wheel_params_.load_from_parameters(node_, "wheel_turning");
   flocking_params_.load_from_parameters(node_, "flocking");
-  node_->declare_parameter("wheel_separation", 0.2);
+  node_->declare_parameter("wheel_separation", 0.14);
+  node_->declare_parameter("wheel_radius", 0.029112741);
   node_->get_parameter("wheel_separation", wheel_separation_);
+  node_->get_parameter("wheel_radius", wheel_radius_);
 
   // Initialize subscribers for sensor topics.
   // (In a real implementation, these messages would be defined in separate packages.)
@@ -115,11 +117,6 @@ void FlockingController::timer_callback() {
     printed_ = true;
   }
   if (!initialized_ && cmd_led_ -> get_subscription_count() > 0){
-    /**Led led_msg;
-    led_msg.color = "red";
-    led_msg.index = 12;
-    led_msg.mode = "SINGLE";
-    cmd_led_->publish(led_msg);*/
     initialized_ = true;
   }
   if (initialized_ && cmd_led_ -> get_subscription_count() == 0){
@@ -190,27 +187,22 @@ void FlockingController::setWheelSpeedsFromVector(const Vector2 & heading) {
   if (wheel_params_.turning_mechanism == TurningMechanism::HARD_TURN) {
     if (abs_angle <= wheel_params_.soft_turn_on_angle_threshold){
       wheel_params_.turning_mechanism = TurningMechanism::SOFT_TURN;
-      //std::cout << "Soft turn" << std::endl;
     }
   }
   if (wheel_params_.turning_mechanism == TurningMechanism::SOFT_TURN) {
     if (abs_angle > wheel_params_.hard_turn_on_angle_threshold){
       wheel_params_.turning_mechanism = TurningMechanism::HARD_TURN;
-      //std::cout << "Hard turn" << std::endl;
     }
     else if (abs_angle <= wheel_params_.no_turn_angle_threshold){
       wheel_params_.turning_mechanism = TurningMechanism::NO_TURN;
-      //std::cout << "No turn" << std::endl;
     }
   }
   if (wheel_params_.turning_mechanism == TurningMechanism::NO_TURN) {
     if (abs_angle > wheel_params_.hard_turn_on_angle_threshold){
       wheel_params_.turning_mechanism = TurningMechanism::HARD_TURN;
-      //std::cout << "Hard turn" << std::endl;
     }
     else if (abs_angle > wheel_params_.no_turn_angle_threshold){
       wheel_params_.turning_mechanism = TurningMechanism::SOFT_TURN;
-      //std::cout << "Soft turn" << std::endl;
     }
   }
 
@@ -245,21 +237,9 @@ void FlockingController::setWheelSpeedsFromVector(const Vector2 & heading) {
   }
 
   geometry_msgs::msg::Twist twist;
-  twist.linear.x = left_speed;
-  twist.linear.y = right_speed;
+  twist.linear.x = wheel_radius_ * (left_speed + right_speed) / 2;
+  twist.angular.z = wheel_radius_ * (right_speed - left_speed) / wheel_separation_;
   cmd_pub_->publish(twist);
-  // Convert differential wheel speeds to a Twist command.
-  // Using standard differential drive kinematics:
-  //   v = (left_speed + right_speed) / 2
-  //   ω = (right_speed - left_speed) / wheel_separation
-  /**double v = (left_speed + right_speed) / 2.0;
-  double omega = (right_speed - left_speed) / wheel_separation_;
-
-  geometry_msgs::msg::Twist twist;
-  twist.linear.x = v;
-  twist.angular.z = omega;
-  cmd_pub_->publish(twist);*/
-
 }
 
 

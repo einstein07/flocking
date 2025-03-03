@@ -6,7 +6,7 @@
 
 # The number of robots.  This should match the 'quantity' value in the argos world file (e.g. argos_worlds/demo.argos).
 
-n=320
+n=10
 
 LAUNCH_FILE=/tmp/argos_interface.launch.py
 CONTROLLER_DIR=/home/sindiso/ros2_dev/src/flocking
@@ -31,7 +31,8 @@ echo -e "\tld = LaunchDescription()" >> $LAUNCH_FILE
 
 for ((i=0; i<n; i++)); do
     namespace="bot$i"
-    domain_id=$((i / 115))  # Group by 115: 0-114 = 0, 115-229 = 1, etc.
+    #domain_id=$((i / 115))  # Group by 115: 0-114 = 0, 115-229 = 1, etc.
+    #echo -e "\t$namespace = Node(package=\"argos3_ros2_bridge\", executable=\"flocking\", name=\"flocking\", output=\"screen\", namespace=\"$namespace\",additional_env={\"ROS_DOMAIN_ID\": \"$domain_id\"}, parameters=[params])" >> $LAUNCH_FILE
     echo -e "\t$namespace = Node(package=\"argos3_ros2_bridge\", executable=\"flocking\", name=\"flocking\", output=\"screen\", namespace=\"$namespace\",additional_env={\"ROS_DOMAIN_ID\": \"$domain_id\"}, parameters=[params])" >> $LAUNCH_FILE
     echo -e "\tld.add_action($namespace)" >> $LAUNCH_FILE
 done >> $LAUNCH_FILE
@@ -40,7 +41,7 @@ echo -e "\treturn ld" >> $LAUNCH_FILE
 
 # keep topics local to computer
 #export ROS_LOCALHOST_ONLY=1
-#export ROS_DOMAIN_ID=0
+export ROS_DOMAIN_ID=1
 
 #argos3 -c $ARGOS_CONFIG_DIR
 
